@@ -37,4 +37,4 @@ class AllPostComponent extends Component {
     }
 }
 
-export default withRouter (AllPostComponent);
+export default withRouter(AllPostComponent);

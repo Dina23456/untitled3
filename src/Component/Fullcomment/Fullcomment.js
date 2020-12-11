@@ -3,7 +3,7 @@ import Commentservice from "../../service/Commentservice";
 
 class Fullcomment extends Component {
     state = {comment: null}
-     Commentservice= new Commentservice();
+    Commentservice = new Commentservice();
 
     async componentDidMount() {
         let {match: {params: {id}}} = this.props
@@ -22,4 +22,5 @@ class Fullcomment extends Component {
         );
     }
 }
+
 export default Fullcomment;

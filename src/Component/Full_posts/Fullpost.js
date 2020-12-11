@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Postservice from "../../service/Postservice";
 
 class Fullpost extends Component {
-    state = {post:null};
+    state = {post: null};
     Postservases = new Postservice();
 
     async componentDidMount() {
