@@ -1,35 +1,40 @@
 import React, {Component} from 'react';
+import Postservice from "../../service/Postservice";
 import Postcomponent from "../Post_component/Postcomponent";
-import Bodycomponent from "../Post_component/Bodycomponent";
+import {Route, Switch, withRouter} from 'react-router-dom';
+import Fullpost from "../Full_posts/Fullpost";
 
 class AllPostComponent extends Component {
-    state={post:[]}
-    componentDidMount(){
-        fetch('https://jsonplaceholder.typicode.com/posts')
-            .then(value => value.json())
-            .then(postFromAPI=>{this.setState({post:postFromAPI})})
+    Postservases = new Postservice();
+    state = {posts: []};
+
+    async componentDidMount() {
+        let posts = await this.Postservases.posts();
+        this.setState({posts});
     }
-    selectThisPost=(id)=>{let chosenPost=this.state.post.find(value=> value.id===id);
-    this.setState({chosenPost})}
+
     render() {
-        let{post,classState,chosenPost}=this.state;
+        let {posts} = this.state;
+        let {match: {URL}} = this.props;
         return (
             <div>
-              <h1 className={classState}>
-                  All post page
-              </h1>
                 {
-                post.map(value=>(
-                <Postcomponent item={value}
-                               key={value.id}
-                               selectThisPost={this.selectThisPost}/>))}
-                <hr/>
-                {
-                    chosenPost && <Bodycomponent item={chosenPost}/>
+                    posts.map(value => <Postcomponent item={value} key={value.id}/>)
                 }
+                <hr/>
+                <Switch>
+                    <Route path={URL + '/:id'} render={(props) => {
+                        const {match: {params: {id}}} = props;
+
+                        return <Fullpost {...props} key={id}/>;
+                    }}/>
+                </Switch>
+
+                <hr/>
             </div>
+
         );
     }
 }
 
-export default AllPostComponent;
+export default withRouter(AllPostComponent);
