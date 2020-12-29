@@ -1,83 +1,28 @@
-import React, {useState, useEffect, useReducer} from 'react';
-let test=0;
-const reducer=(state,action)=>{
-    switch (action.type){
-        case'Set_todo':{
-            return action.payload
-        }
-        case'Change_todo_Status':{
-            return{
-            ...state,
-                complited:!state.complited,
-            }
-        }
-        case'Change_todo_title':{
-            return{
-                ...state,
-                title:action.payload,
-            }
-        }
-        default:{
-            return state;
-        }
-    }
-}
-
-const intialState={
-    userId:null,
-    id:null,
-    title:"",
-    completed: false
-
-
-}
+import React from 'react';
+import {useSelector, useDispatch} from "react-redux"
+import {INC_COUNTER,
+    DEC_COUNTER,
+    RESET_COUNTER} from "./redux/action-types"
 export default function App() {
-    const [state, dispatch]=useReducer(reducer,intialState)
-    const [user, setuser] = useState({name: 'a', age: 18});
-    const [counter, setCounter]=useState(1);
-    // const [todo, setTodo]=useState()
-    useEffect(() => {
-        console.log('i was called');
-        fetch(`https://jsonplaceholder.typicode.com/todos/${counter}`)
-            .then(response => response.json())
-            .then(json =>
-                dispatch({type:"Set_todo", payload: json}))
-    }, [counter])
-
-    // const onclickHandler = () => {
-    //     // test++;
-    //     // console.log(test);
-    //     setuser((prevstate)=>({
-    //         ...prevstate,
-    //         age:prevstate.age +1
-    //     }))
-    // };
-    // const nameonclickHandler = () => {
-    //     setuser((prevstate) => ({
-    //         ...prevstate,
-    //         name: prevstate.name + '!'
-    //     }))
-    // };
-    const onclickHandler=()=>setCounter((prev) => prev + 1);
+    const counter = useSelector(({counter}) => counter)
+    const dispatch = useDispatch();
+    const handleInc = () => dispatch({
+        type: INC_COUNTER
+    });
+    const handleDec = () => dispatch({
+        type: DEC_COUNTER
+    });
+    const handleReset = () => dispatch({
+        type: RESET_COUNTER
+    });
     return (
         <div className='App'>
-            <button onClick={onclickHandler}>inc</button>
-            {/*<button onClick={nameonclickHandler}>change user</button>*/}
-            {/*/!*<h1>User:{user}</h1>*!/*/}
-            {/*<h2>hello world</h2>*/}
-            {/*<h2>{test}</h2>*/}
-            {/*<h2>{user.name}</h2>*/}
-            {/*<h2>{user.age}</h2>*/}
-            <h1> Counter:{counter}</h1>
-            {!!state &&(
-                <>
-                <h2>{state.id}</h2>
-                <h2>{state.title}</h2>
-                <h2>{state.completed.toString()}</h2>
-                </>
-            ) }
+            <h1>Hello CodeSandbox {counter}</h1>
+            <button onClick={handleInc}>inc</button>
+            <button onClick={handleDec}>dec</button>
+            <button onClick={handleReset}>reset</button>
 
-
+            <h2>start editing to see some magic happen"</h2>
         </div>
     )
 }
